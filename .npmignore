@@ -9,7 +9,6 @@ package-lock.json
 .vscode
 .idea
 config/.npmrc
-dist
 .env
 coverage
 tsconfig.json
