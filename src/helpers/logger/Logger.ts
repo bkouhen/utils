@@ -1,10 +1,11 @@
 // Main Modules
 import winston from 'winston';
-const { combine, label, timestamp, errors, printf, colorize, json, simple, prettyPrint, splat } = winston.format;
+const { combine, timestamp, errors, printf, colorize, json, simple, prettyPrint, splat } = winston.format;
 import { LEVEL, SPLAT, MESSAGE } from 'triple-beam';
+import { format } from 'util';
 
 // Interfaces
-import { WinstonLogger, LoggerConfigOptions } from '../interfaces/Logger';
+import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
 
 export class Logger {
   private logger: WinstonLogger;
@@ -46,7 +47,10 @@ export class Logger {
     if (options.debugMode) {
       const formats: winston.Logform.Format[] = [];
       formats.push(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }));
-      if (options.debugFormatting?.splat) formats.push(splat());
+      if (options.debugFormatting?.splat) {
+        formats.push(this.addSplatDebug());
+        formats.push(splat());
+      }
       if (options.debugFormatting?.json) formats.push(json());
       if (!options.debugFormatting?.json) formats.push(simple());
       if (options.debugFormatting?.pretty) formats.push(prettyPrint());
@@ -69,9 +73,32 @@ export class Logger {
     });
   }
 
+  private addSplatDebug() {
+    return {
+      transform(info: winston.Logform.TransformableInfo): winston.Logform.TransformableInfo {
+        //@ts-ignore
+        const splatArgs = info[SPLAT];
+        if (splatArgs) {
+          const stringArgs = format(...splatArgs);
+          info.message = `${info.message} ${stringArgs}`;
+          return info;
+        }
+        return info;
+      },
+    };
+  }
+
   private formatLogMessage(options: LoggerConfigOptions): winston.Logform.Format {
     return winston.format.printf((info) => {
       const log = `${info.timestamp} - ${info.level}: ${info.message}`;
+      if (options.debugMode && options.debugFormatting && options.debugFormatting.json) {
+        if (options.errorStack) {
+          return JSON.stringify(info);
+        }
+        delete info.stack;
+        return JSON.stringify(info);
+      }
+
       if (options.debugMode) {
         if (options.errorStack) {
           return info.stack ? `${log}\n${info.stack}` : log;
