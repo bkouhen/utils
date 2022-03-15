@@ -59,7 +59,7 @@ interface LoggerConfigOptions {
 
 ## Debug
 
-You can activate the debugMode option in order format the log as a string with additional formatting parameters
+You can activate the Debug Mode option in order to format the log as a string with additional formatting parameters
 
 ```typescript
 const logger = new Logger().initLogger({
@@ -77,7 +77,7 @@ const logger = new Logger().initLogger({
 
 ## Default Metadata
 
-The defaultMeta object available in the options can contain whatever property you want. It will be available in Normal Mode as a property of the json object.
+The defaultMeta object available in the options can contain whatever property you want. It will be split into properties of the json object in Normal Mode.
 
 ```typescript
 const logger = new Logger().initLogger({
