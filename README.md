@@ -15,11 +15,17 @@ npm install --save @bkouhen/utils
 More on this soon
 
 ```typescript
-import package from '@bkouhen/utils';
+import { package } from '@bkouhen/utils';
 
 //Hello World
 console.log('Hello World');
 ```
+
+## Documentation
+
+### Helpers
+
+- [Logger](./docs/helpers/Logger.md)
 
 ## License
 
