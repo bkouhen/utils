@@ -1,6 +1,6 @@
 {
   "name": "@bkouhen/utils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "author": "Boubker El Kouhene",
   "main": "dist/index.js",
