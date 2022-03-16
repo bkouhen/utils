@@ -1,17 +1,23 @@
 // Main Modules
 import winston from 'winston';
-const { combine, timestamp, errors, printf, colorize, json, simple, prettyPrint, splat } = winston.format;
-import { LEVEL, SPLAT, MESSAGE } from 'triple-beam';
+import { SPLAT } from 'triple-beam';
 import { format } from 'util';
+const { combine, timestamp, errors, printf, colorize, json, simple, prettyPrint, splat } = winston.format;
 
 // Interfaces
 import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
 
+/** Class defining a Winston Logger */
 export class Logger {
   private logger: WinstonLogger;
 
   constructor() {}
 
+  /**
+   * Initialize a Winston Logger Instance
+   * @param {LoggerConfigOptions} options - options passed to the Logger as configuration
+   * @returns {WinstonLogger} The generated Logger instance
+   */
   public initLogger(options: LoggerConfigOptions): WinstonLogger {
     const logger = winston.createLogger({
       level: options.logLevel,
@@ -31,6 +37,11 @@ export class Logger {
     return this.logger;
   }
 
+  /**
+   * Initialize a Winston File Transport
+   * @param {LoggerConfigOptions} options - options passed to the Logger as configuration
+   * @returns {winston.transport} The generated Transport instance
+   */
   private generateFileTransport(options: LoggerConfigOptions): winston.transport {
     return new winston.transports.File({
       filename: options.fileTransport?.filePath,
@@ -43,6 +54,11 @@ export class Logger {
     });
   }
 
+  /**
+   * Initialize a Winston Console Transport
+   * @param {LoggerConfigOptions} options - options passed to the Logger as configuration
+   * @returns {winston.transport} The generated Transport instance
+   */
   private generateConsoleTransport(options: LoggerConfigOptions): winston.transport {
     if (options.debugMode) {
       const formats: winston.Logform.Format[] = [];
@@ -88,6 +104,11 @@ export class Logger {
     };
   }
 
+  /**
+   * Functions that returns the log message after formatting
+   * @param {LoggerConfigOptions} options - options passed to the Logger as configuration
+   * @returns {winston.Logform.Format} The formatted message
+   */
   private formatLogMessage(options: LoggerConfigOptions): winston.Logform.Format {
     return winston.format.printf((info) => {
       const log = `${info.timestamp} - ${info.level}: ${info.message}`;

@@ -1,6 +1,7 @@
-node_modules
-src
+node_modules/
+src/
 data/
+coverage/
 docs/
 tmp/
 .npmrc
@@ -12,7 +13,6 @@ jest.config.js
 .idea
 config/.npmrc
 .env
-coverage
 tsconfig.json
 .editorconfig
 .prettierrc.js
