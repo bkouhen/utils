@@ -14,7 +14,7 @@ const finished = util.promisify(stream.finished);
 
 const start = async () => {
   const downloader = fileDownloader({
-    url: 'https://raw.githubusercontent.com/dominictarr/split/master/readme.markdown',
+    url: 'https://raw.githubusercontent.com/bkouhen/utils/master/src/helpers/file/streamHelper/sample.ndjson',
   });
 
   const writer = fs.createWriteStream('./file.txt');
