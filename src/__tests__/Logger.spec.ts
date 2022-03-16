@@ -1,6 +1,6 @@
-import { Logger } from './Logger';
+import { Logger } from '../helpers/logger/Logger';
 import path from 'path';
-import fs from 'fs';
+import fs from 'fs-extra';
 
 expect.extend({
   toMatchLogFormat(received: string, match: string) {
@@ -52,9 +52,21 @@ expect.extend({
   },
 });
 
+const assetsPath = path.join(__dirname, '/assets');
+
 beforeAll(() => {
-  const logFilePath = path.join(__dirname, '/logfile.log');
-  fs.closeSync(fs.openSync(logFilePath, 'w'));
+  fs.ensureDirSync(assetsPath);
+  const logFilePath = path.join(__dirname, '/assets/logfile.log');
+  fs.ensureFileSync(logFilePath);
+});
+
+afterAll(async () => {
+  const logFilePath = path.join(__dirname, '/assets/logfile.log');
+  await fs.remove(logFilePath, (error) => {
+    if (error) {
+      console.log(error);
+    }
+  });
 });
 
 describe('Init Logger Test', () => {
@@ -66,7 +78,7 @@ describe('Init Logger Test', () => {
     },
     fileTransport: {
       enable: true,
-      filePath: path.join(__dirname, '/logfile.log'),
+      filePath: path.join(__dirname, '/assets/logfile.log'),
     },
   });
 
@@ -91,7 +103,7 @@ describe('Init Logger Test', () => {
 
   test('if File Transport is enabled', () => {
     expect(logger.transports.length).toStrictEqual(2);
-    expect(fs.existsSync(path.join(__dirname, '/logfile.log'))).toStrictEqual(true);
+    expect(fs.existsSync(path.join(__dirname, '/assets/logfile.log'))).toStrictEqual(true);
   });
 });
 

@@ -1,0 +1,3 @@
+{"name":"rob","age":30,"hobbies":["sports","arts"]}
+{"name":"mike","age":22,"hobbies":["soccer","arts"]}
+{"name":"john","age":18,"hobbies":["sports","trips"],"list":{"enable":true,"disable":"no"}}
