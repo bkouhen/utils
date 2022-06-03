@@ -6,9 +6,12 @@ export * from './helpers/file/streamHelper/streamHelper';
 export * from './interfaces/Logger';
 export * from './interfaces/File';
 
+import path from 'path';
 import { Logger } from './helpers/logger/Logger';
 import { StreamChainer } from './helpers/file/streamHelper/streamChainer';
 import { StreamChainerConfiguration } from './interfaces/File';
+
+console.log(__dirname);
 
 const logger = new Logger().initLogger({
   logLevel: 'debug',
@@ -27,7 +30,7 @@ const streamConfig: StreamChainerConfiguration = {
     {
       type: 'FILE_READER',
       config: {
-        absolutePath: './src/__tests__/assets/sample.csv.gz',
+        absolutePath: path.join(__dirname, '__tests__', 'assets', 'sample.long.csv.gz'),
       },
     },
     {
@@ -49,9 +52,13 @@ const streamConfig: StreamChainerConfiguration = {
       },
     },
     {
+      type: 'GZIP',
+      config: { type: 'ZIP' },
+    },
+    {
       type: 'FILE_WRITER',
       config: {
-        absolutePath: './src/samplewritten.log',
+        absolutePath: path.join(__dirname, 'samplewritten.log.gz'),
       },
     },
   ],
