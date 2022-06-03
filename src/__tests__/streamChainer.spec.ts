@@ -1,17 +1,16 @@
 import { StreamChainer } from '../helpers/file/streamHelper/streamChainer';
 import { Logger } from '../helpers/logger/Logger';
 import { StreamChainerConfiguration } from '../interfaces/File';
+import { lineSplitStream } from '../helpers/file/streamHelper/streamHelper';
 import path from 'path';
 import util from 'util';
 import fs from 'fs-extra';
 import stream from 'stream';
 
-import { exec } from 'child_process';
 import { spawn } from 'child_process';
 
 jest.setTimeout(30000);
 
-const pExec = util.promisify(exec);
 const pRemove = util.promisify(fs.remove);
 const assetsPath = path.join(__dirname, '/assets');
 
@@ -126,7 +125,8 @@ describe('Stream Chainer Test - Complete Process', () => {
           type: 'CSV_FORMATTER',
           config: {
             delimiter: ';',
-            headers: false,
+            headers: true,
+            includeEndRowDelimiter: true,
           },
         },
         {
@@ -144,5 +144,33 @@ describe('Stream Chainer Test - Complete Process', () => {
     const streamChainer = new StreamChainer(config, logger);
     await streamChainer.run();
     expect(fs.existsSync(`${assetsPath}/sample.long.written.csv.gz`)).toStrictEqual(true);
+
+    let resBase = 0;
+    let resOut = 0;
+    let filesMatch = true;
+
+    const resultMap = new Map<number, string>();
+
+    const gunzipBase = spawn('gunzip', ['-c', `${assetsPath}/sample.long.csv.gz`]);
+    const pipeBase = gunzipBase.stdout.pipe(lineSplitStream()).pipe(new stream.PassThrough({ objectMode: true }));
+
+    for await (const data of pipeBase) {
+      const lineSplit = data.toString().split(',').join('');
+      resultMap.set(resBase, lineSplit);
+      resBase += 1;
+    }
+
+    const gunzipOut = spawn('gunzip', ['-c', `${assetsPath}/sample.long.written.csv.gz`]);
+    const pipeOut = gunzipOut.stdout.pipe(lineSplitStream()).pipe(new stream.PassThrough({ objectMode: true }));
+
+    for await (const data of pipeOut) {
+      const lineSplit = data.toString().split(';').join('');
+      const mapValue = resultMap.get(resOut);
+      if (mapValue !== lineSplit) filesMatch = false;
+      resOut += 1;
+    }
+
+    expect(resBase).toStrictEqual(resOut);
+    expect(filesMatch).toBeTruthy();
   });
 });
