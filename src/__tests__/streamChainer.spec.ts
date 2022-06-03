@@ -2,7 +2,17 @@ import { StreamChainer } from '../helpers/file/streamHelper/streamChainer';
 import { Logger } from '../helpers/logger/Logger';
 import { StreamChainerConfiguration } from '../interfaces/File';
 import path from 'path';
+import util from 'util';
+import fs from 'fs-extra';
+import stream from 'stream';
 
+import { exec } from 'child_process';
+import { spawn } from 'child_process';
+
+jest.setTimeout(30000);
+
+const pExec = util.promisify(exec);
+const pRemove = util.promisify(fs.remove);
 const assetsPath = path.join(__dirname, '/assets');
 
 const logger = new Logger().initLogger({
@@ -18,7 +28,9 @@ const logger = new Logger().initLogger({
 
 beforeAll(() => {});
 
-afterAll(() => {});
+afterAll(async () => {
+  await pRemove(`${assetsPath}/sample.long.written.csv.gz`);
+});
 
 describe('Stream Chainer Test - Errors', () => {
   test('if it throws when no config file', async () => {
@@ -88,4 +100,49 @@ describe('Stream Chainer Test - Errors', () => {
   });
 });
 
-describe('', () => {});
+describe('Stream Chainer Test - Complete Process', () => {
+  test('if file process is complete and correct', async () => {
+    const config: StreamChainerConfiguration = {
+      name: 'STREAM_CHAIN',
+      items: [
+        {
+          type: 'FILE_DOWNLOADER',
+          config: {
+            url: 'https://github.com/bkouhen/utils/raw/master/src/__tests__/assets/sample.long.csv.gz',
+          },
+        },
+        {
+          type: 'GZIP',
+          config: { type: 'UNZIP' },
+        },
+        {
+          type: 'CSV_PARSER',
+          config: {
+            delimiter: ',',
+            headers: true,
+          },
+        },
+        {
+          type: 'CSV_FORMATTER',
+          config: {
+            delimiter: ';',
+            headers: false,
+          },
+        },
+        {
+          type: 'GZIP',
+          config: { type: 'ZIP' },
+        },
+        {
+          type: 'FILE_WRITER',
+          config: {
+            absolutePath: path.join(assetsPath, 'sample.long.written.csv.gz'),
+          },
+        },
+      ],
+    };
+    const streamChainer = new StreamChainer(config, logger);
+    await streamChainer.run();
+    expect(fs.existsSync(`${assetsPath}/sample.long.written.csv.gz`)).toStrictEqual(true);
+  });
+});

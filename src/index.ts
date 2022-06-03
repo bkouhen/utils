@@ -27,10 +27,16 @@ const logger = new Logger().initLogger({
 const streamConfig: StreamChainerConfiguration = {
   name: 'Test Stream',
   items: [
+    // {
+    //   type: 'FILE_READER',
+    //   config: {
+    //     absolutePath: path.join(__dirname, '__tests__', 'assets', 'sample.long.csv.gz'),
+    //   },
+    // },
     {
-      type: 'FILE_READER',
+      type: 'FILE_DOWNLOADER',
       config: {
-        absolutePath: path.join(__dirname, '__tests__', 'assets', 'sample.long.csv.gz'),
+        url: 'https://github.com/bkouhen/utils/raw/master/src/__tests__/assets/sample.long.csv.gz',
       },
     },
     {
