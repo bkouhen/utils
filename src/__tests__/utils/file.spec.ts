@@ -9,10 +9,6 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-beforeAll(() => {});
-
-afterAll(() => {});
-
 const logger = { debug: jest.fn(), error: jest.fn(), warn: jest.fn() } as unknown as WinstonLogger;
 
 describe('fileExists tests', () => {
