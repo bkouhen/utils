@@ -25,7 +25,7 @@ export const pExec = util.promisify(exec);
  *
  * @example
  * ```ts
- * const gunzipBase = spawn('gunzip', ['-c', `${assetsPath}/sample.long.csv.gz`]);
+ * const gunzipBase = spawn(`gunzip -c ${assetsPath}/sample.long.csv.gz`]);
  * const pipeBase = gunzipBase.stdout.pipe(lineSplitStream()).pipe(new stream.PassThrough({ objectMode: true }));
  *
  * for await (const data of pipeBase) {

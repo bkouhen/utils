@@ -4,6 +4,7 @@ import { WinstonLogger } from 'src/interfaces';
 const ERR_VALUE = -1;
 
 /**
+ * Function that allows to hash a string using a predefined algorithm
  *
  * @param algorithm Algorithm to be used during the hash
  * @param data The string that should be hashed

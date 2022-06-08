@@ -4,6 +4,15 @@ import { WinstonLogger } from '../interfaces/Logger';
 
 const ERR_VALUE = -1;
 
+/**
+ * Function that allows to generate a unique identifier based on a predefined ID and a Timestamp
+ *
+ * @param identifier Unique identifier to provide
+ * @param timestamp Timestamp that should be in s or ms format
+ * @param throwError Whether the function should thrown when timestamp is not valid
+ * @param logger optional logger
+ * @returns either a string if the timestamp is valid or an ERR_VALUE if throwing is disabled
+ */
 export const generateUUID = (
   identifier: string,
   timestamp: number,

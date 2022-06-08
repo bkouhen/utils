@@ -9,9 +9,6 @@ export * as Interfaces from './interfaces/index';
 export * as Utils from './utils/index';
 
 import { Logger } from './helpers/logger/Logger';
-import { countLinesSync } from './utils/file';
-
-console.log(__dirname);
 
 const logger = new Logger().initLogger({
   logLevel: 'debug',
@@ -26,8 +23,6 @@ const logger = new Logger().initLogger({
 
 const start = async () => {
   logger.info('Starting script');
-  const numberOfLines = countLinesSync('/home/bkouhen/scripts/utils/package.json', true, logger);
-  logger.info(`${numberOfLines} lines for the file`);
 };
 
 start().then(() => {
