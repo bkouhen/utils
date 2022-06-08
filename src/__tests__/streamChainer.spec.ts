@@ -168,6 +168,7 @@ describe('Stream Chainer Test - Complete Process', () => {
       const mapValue = resultMap.get(resOut);
       if (mapValue !== lineSplit) filesMatch = false;
       resOut += 1;
+      
     }
 
     expect(resBase).toStrictEqual(resOut);
