@@ -1,19 +1,19 @@
-import { fnPipe } from '../interfaces/Env';
+import { EnvParser } from '../interfaces/Env';
 
-export const env: fnPipe =
-  (...funcs: Function[]) =>
-  (variableName: string) => {
+export const env: EnvParser =
+  (...functions: Function[]) =>
+  (varName: string) => {
     try {
-      const envVariable = process.env[variableName];
-      if (!funcs.length) return envVariable;
-      if (funcs.length === 1) return funcs[0](envVariable);
+      const pEnv = process.env[varName];
+      if (!functions.length) return pEnv;
+      if (functions.length === 1) return functions[0](pEnv);
 
-      return funcs.reduce(
-        (prev: Function, curr: Function) =>
-          (...args: any[]) =>
-            curr(prev(...args)),
-      )(envVariable);
+      return functions.reduce((prev: Function, curr: Function) => {
+        return (...args: any[]) => {
+          return prev(curr(...args));
+        };
+      })(pEnv);
     } catch (e) {
-      throw new Error(`Error while parsing variable ${variableName}: ${e.message}`);
+      throw new Error(`Error while parsing variable ${varName}: ${e.message}`);
     }
   };

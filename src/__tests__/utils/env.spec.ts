@@ -25,7 +25,7 @@ describe('Unit Functions tests', () => {
   test('if str function works correctly', () => {
     expect(str('Hello')).toStrictEqual('Hello');
     expect(str('2')).toStrictEqual('2');
-    expect(str()).toStrictEqual('');
+    expect(str()).toBeUndefined();
   });
 
   test('if int function works correctly', () => {
@@ -75,11 +75,84 @@ describe('Unit Functions tests', () => {
       { name: 'Mark', age: 23 },
       { name: 'Eren', age: 18 },
     ]);
-    expect(array('', int)()).toBeUndefined();
+    expect(array(',', int)()).toBeUndefined();
     expect(array('', int)('1,2,3')).toBeUndefined();
   });
 
   test('if defaultValue function works correctly', () => {
-    
-  })
+    expect(defaultValue(1)(3)).toStrictEqual(3);
+    expect(defaultValue(1)()).toStrictEqual(1);
+    expect(defaultValue(false)(true)).toStrictEqual(true);
+  });
+
+  test('if required function works correctly', () => {
+    expect(() => required()).toThrowError();
+    expect(required('')).toStrictEqual('');
+    expect(required(false)).toStrictEqual(false);
+    expect(required({})).toStrictEqual({});
+    expect(required([])).toStrictEqual([]);
+    expect(required(null)).toStrictEqual(null);
+  });
+});
+
+describe('Env Parser tests', () => {
+  test('if it does parse with no input functions', () => {
+    expect(env()('STRING')).toStrictEqual('Hello World');
+    expect(env()('')).toBeUndefined();
+  });
+
+  test('if it does parse an int', () => {
+    expect(env(int)('INTEGER')).toStrictEqual(2000);
+    expect(env(int)('ZERO')).toStrictEqual(0);
+    expect(env(int)('')).toBeUndefined();
+  });
+
+  test('if it does parse a float', () => {
+    expect(env(float)('FLOAT')).toStrictEqual(0.2);
+    expect(env(float)('')).toBeUndefined();
+  });
+
+  test('if it does parse a boolean', () => {
+    expect(env(bool)('TRUE_BOOLEAN')).toStrictEqual(true);
+    expect(env(bool)('FALSE_BOOLEAN')).toStrictEqual(false);
+    expect(env(bool)('')).toBeUndefined();
+  });
+
+  test('if it does parse a json', () => {
+    expect(env(json)('JSON')).toStrictEqual({ name: 'Mark', age: 23 });
+    expect(env(json)('')).toBeUndefined();
+  });
+
+  test('if it does parse a base64', () => {
+    expect(env(base64(false))('BASE64')).toStrictEqual('Hello World');
+    expect(env(base64(false))('BASE64_ESCAPE')).toStrictEqual('Hello\nWorld');
+    expect(env(base64(true))('BASE64_ESCAPE')).toStrictEqual('Hello\\nWorld');
+    expect(env(base64(false))('')).toBeUndefined();
+  });
+
+  test('if it does parse an array', () => {
+    expect(env(array(',', int))('ARRAY_OF_INT')).toStrictEqual([1, 2, 3]);
+    expect(env(array(',', int))('')).toBeUndefined();
+  });
+
+  test('if required throws an error', () => {
+    expect(() => env(required)('DOES_NOT_EXIST')).toThrowError(
+      'Error while parsing variable DOES_NOT_EXIST: Unable to parse the value, check its type',
+    );
+  });
+
+  test('if it does take the defaultValue', () => {
+    expect(env(defaultValue('Hello Me'))('STRING')).toStrictEqual('Hello World');
+    expect(env(defaultValue('Hello Me'))('STRING_NO_EXIST')).toStrictEqual('Hello Me');
+  });
+
+  test('if chaining functions works', () => {
+    expect(env(str, int)('INTEGER')).toStrictEqual('2000');
+    expect(env(int, str, int)('INTEGER')).toStrictEqual(2000);
+    expect(env(int, required)('INTEGER')).toStrictEqual(2000);
+    expect(() => env(int, required)('INTEGER_NO_EXIST')).toThrowError();
+    expect(env(int, bool, json)('INTEGER')).toBeUndefined();
+    expect(env(int, defaultValue('10'))('')).toStrictEqual(10);
+    expect(env(int, defaultValue('10'), required)('INTEGER')).toStrictEqual(2000);
+  });
 });
