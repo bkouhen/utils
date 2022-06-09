@@ -1,6 +1,5 @@
 // Helpers
-export * from './helpers/logger/Logger';
-export * from './helpers/file/streamHelper/streamHelper';
+export * as Helpers from './helpers/index';
 
 // Interfaces
 export * as Interfaces from './interfaces/index';

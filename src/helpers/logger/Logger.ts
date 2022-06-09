@@ -2,7 +2,7 @@
 import winston from 'winston';
 import { SPLAT } from 'triple-beam';
 import { format } from 'util';
-const { combine, timestamp, errors, printf, colorize, json, simple, prettyPrint, splat } = winston.format;
+const { combine, timestamp, errors, colorize, json, simple, prettyPrint, splat } = winston.format;
 
 // Interfaces
 import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
