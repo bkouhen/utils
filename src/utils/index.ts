@@ -4,3 +4,6 @@ export * from './time';
 export * from './file';
 export * from './hash';
 export * from './uuid';
+export * from './docker';
+export * from './npm';
+export * from './script';

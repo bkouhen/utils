@@ -11,11 +11,12 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage",
+    "test:docker": "docker-compose run --rm test",
     "clean": "rm -rf node_modules dist",
     "build": "tsc",
     "watch": "tsc -w",
-    "start:dev": "ts-node ./src/index.ts",
     "start": "tsc && node ./dist/index.js",
+    "start:dev": "ts-node ./src/index.ts",
     "start:docker": "docker-compose run --rm script"
   },
   "devDependencies": {
