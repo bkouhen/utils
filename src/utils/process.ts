@@ -1,5 +1,5 @@
 import util from 'util';
-import { exec, spawn as childSpawn, SpawnOptionsWithoutStdio } from 'child_process';
+import { exec, spawn as childSpawn, spawnSync as childSpawnSync, SpawnOptionsWithoutStdio } from 'child_process';
 
 /**
  * Promisified version of the `child_process` exec function
@@ -40,4 +40,11 @@ export const spawn = (command: string, options?: SpawnOptionsWithoutStdio) => {
   let argumentsArray = command.split(' ');
   const baseCommand = argumentsArray.shift();
   return childSpawn(baseCommand!, [...argumentsArray], options);
+};
+
+export const spawnSync = (command: string, options?: SpawnOptionsWithoutStdio) => {
+  if (!command) throw new Error('No command has been filled in');
+  let argumentsArray = command.split(' ');
+  const baseCommand = argumentsArray.shift();
+  return childSpawnSync(baseCommand!, [...argumentsArray], options);
 };

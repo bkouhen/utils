@@ -3,4 +3,5 @@ export interface ScriptConfiguration {
   scriptName: string;
   createDockerFiles?: boolean;
   installDependencies?: boolean;
+  runNpmStart?: boolean;
 }

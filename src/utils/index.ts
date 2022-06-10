@@ -1,9 +1,9 @@
-export * from './process';
-export * from './stream';
-export * from './time';
-export * from './file';
-export * from './hash';
-export * from './uuid';
-export * from './docker';
-export * from './npm';
-export * from './script';
+export * as Process from './process';
+export * as Stream from './stream';
+export * as Time from './time';
+export * as File from './file';
+export * as Hash from './hash';
+export * as UUID from './uuid';
+export * as Docker from './docker';
+export * as Npm from './npm';
+export * as Script from './script';

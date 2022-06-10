@@ -21,7 +21,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-const logger = { debug: jest.fn(), error: jest.fn(), warn: jest.fn() } as unknown as WinstonLogger;
+const logger = { debug: jest.fn(), error: jest.fn(), warn: jest.fn(), info: jest.fn() } as unknown as WinstonLogger;
 
 beforeAll(() => {
   fs.ensureDirSync(assetsPath);
@@ -35,6 +35,7 @@ afterAll(async () => {
   await pRemove(`${assetsPath}/tsconfig.json.gen`);
   await pRemove(`${assetsPath}/new_script`);
   await pRemove(`${assetsPath}/new_script2`);
+  await pRemove(`${assetsPath}/non_existant_dir`);
 });
 
 describe('Generating files tests', () => {
@@ -116,5 +117,53 @@ describe('Generating new script tests', () => {
     await expect(fs.pathExists(`${assetsPath}/new_script2/src`)).resolves.toStrictEqual(true);
     await expect(fs.pathExists(`${assetsPath}/new_script2/src/__tests__`)).resolves.toStrictEqual(true);
     expect(logger.error).toBeCalledTimes(0);
+  });
+
+  test('if Script installDependencies returns an error when npm install fails', async () => {
+    const config: ScriptConfiguration = {
+      absolutePath: assetsPath,
+      scriptName: 'new_script3',
+      installDependencies: true,
+    };
+    const script = new Script(config, logger);
+    const cmdResult = script.installDependencies(`${assetsPath}/non_existant_dir`);
+    expect(cmdResult.code).not.toStrictEqual(0);
+    expect(logger.error).toBeCalledTimes(1);
+  });
+
+  test('if Script installDependencies returns a correct exit code when npm install succeeds', async () => {
+    const config: ScriptConfiguration = {
+      absolutePath: assetsPath,
+      scriptName: 'new_script2',
+      installDependencies: true,
+    };
+    const script = new Script(config, logger);
+    const cmdResult = script.installDependencies(`${assetsPath}/new_script2`);
+    expect(cmdResult.code).toStrictEqual(0);
+    expect(logger.info).toBeCalledTimes(2);
+  });
+
+  test('if Script runNpmStart returns an error when npm run start:dev fails', async () => {
+    const config: ScriptConfiguration = {
+      absolutePath: assetsPath,
+      scriptName: 'new_script3',
+      installDependencies: true,
+    };
+    const script = new Script(config, logger);
+    const cmdResult = script.runNpmStart(`${assetsPath}/non_existant_dir`);
+    expect(cmdResult.code).not.toStrictEqual(0);
+    expect(logger.error).toBeCalledTimes(1);
+  });
+
+  test('if Script installDependencies returns a correct exit code when npm run start:dev succeeds', async () => {
+    const config: ScriptConfiguration = {
+      absolutePath: assetsPath,
+      scriptName: 'new_script2',
+      installDependencies: true,
+    };
+    const script = new Script(config, logger);
+    const cmdResult = script.runNpmStart(`${assetsPath}/new_script2`);
+    expect(cmdResult.code).toStrictEqual(0);
+    expect(logger.info).toBeCalledTimes(2);
   });
 });

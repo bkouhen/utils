@@ -20,8 +20,25 @@ const logger = new Logger().initLogger({
   },
 });
 
+import { spawn as originalSpawn } from 'child_process';
+import { spawn, pExec, spawnSync } from './utils/process';
+
 const start = async () => {
   logger.info('Starting script');
+  // await new Promise((resolve) => {
+  //   const ls = spawn('ls -alh');
+  //   ls.stdout.on('data', (data) => console.log(data.toString()));
+  //   ls.stderr.on('data', (data) => console.error(data.toString()));
+  //   ls.on('close', (exitCode) => {
+  //     console.log('command exited with code ' + exitCode);
+  //     resolve(undefined);
+  //   });
+  // });
+
+  const lsSync = spawnSync('npm i --prefix ./src');
+  console.dir(lsSync);
+  console.log(lsSync.stdout.toString());
+  console.log(lsSync.stderr.toString());
 };
 
 start().then(() => {

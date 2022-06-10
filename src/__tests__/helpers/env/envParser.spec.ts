@@ -1,4 +1,15 @@
-import { array, base64, bool, defaultValue, float, int, json, required, str, env } from '../helpers/env/envParser';
+import {
+  array,
+  base64,
+  bool,
+  defaultValue,
+  float,
+  int,
+  json,
+  required,
+  str,
+  env,
+} from '../../../helpers/env/envParser';
 
 process.env.STRING = 'Hello World';
 process.env.ZERO = '0';

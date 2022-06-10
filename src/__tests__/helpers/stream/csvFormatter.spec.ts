@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { fileWriter, csvFormatter, csvParser, fileReader } from '../helpers/file/streamHelper/streamHelper';
+import { fileWriter, csvFormatter, csvParser, fileReader } from '../../../helpers/file/streamHelper/streamHelper';
 
-const assetsPath = path.join(__dirname, '/assets');
+const assetsPath = path.join(__dirname, '/../../assets');
 
 beforeAll(() => {
   fs.ensureDirSync(assetsPath);

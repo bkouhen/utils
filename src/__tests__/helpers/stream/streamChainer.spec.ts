@@ -1,7 +1,7 @@
-import { StreamChainer } from '../helpers/file/streamHelper/streamChainer';
-import { Logger } from '../helpers/logger/Logger';
-import { StreamChainerConfiguration } from '../interfaces/File';
-import { lineSplitStream } from '../helpers/file/streamHelper/streamHelper';
+import { StreamChainer } from '../../../helpers/file/streamHelper/streamChainer';
+import { Logger } from '../../../helpers/logger/Logger';
+import { StreamChainerConfiguration } from '../../../interfaces/File';
+import { lineSplitStream } from '../../../helpers/file/streamHelper/streamHelper';
 import path from 'path';
 import util from 'util';
 import fs from 'fs-extra';
@@ -12,7 +12,7 @@ import { spawn } from 'child_process';
 jest.setTimeout(30000);
 
 const pRemove = util.promisify(fs.remove);
-const assetsPath = path.join(__dirname, '/assets');
+const assetsPath = path.join(__dirname, '/../../assets');
 
 const logger = new Logger().initLogger({
   logLevel: 'debug',
@@ -168,7 +168,6 @@ describe('Stream Chainer Test - Complete Process', () => {
       const mapValue = resultMap.get(resOut);
       if (mapValue !== lineSplit) filesMatch = false;
       resOut += 1;
-      
     }
 
     expect(resBase).toStrictEqual(resOut);

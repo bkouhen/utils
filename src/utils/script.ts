@@ -2,8 +2,8 @@ import fs from 'fs-extra';
 import { generateJSONPackageFile } from './npm';
 import { generateDockerComposeFile, generateDockerFile } from './docker';
 import { ScriptConfiguration } from '../interfaces/Script';
-import { pExec } from './process';
-import { WinstonLogger } from 'src/interfaces';
+import { pExec, spawn, spawnSync } from './process';
+import { WinstonLogger } from '../interfaces/Logger';
 
 export class Script {
   private config: ScriptConfiguration;
@@ -14,6 +14,7 @@ export class Script {
       ...config,
       createDockerFiles: config.createDockerFiles ?? true,
       installDependencies: config.installDependencies ?? true,
+      runNpmStart: config.runNpmStart ?? true,
     };
     this.logger = logger;
   }
@@ -43,11 +44,55 @@ export class Script {
     await generateJestConfigFile(`${scriptDir}/jest.config.js`, this.config.scriptName);
     await generateTypescriptConfigFile(`${scriptDir}/tsconfig.json`);
 
-    if (this.config.installDependencies) await pExec(`cd ${scriptDir}; npm i`);
-
     if (this.config.createDockerFiles) {
       await generateDockerFile(`${scriptDir}/Dockerfile`);
       await generateDockerComposeFile(`${scriptDir}/docker-compose.yml`);
+    }
+
+    if (this.config.installDependencies) {
+      this.installDependencies(scriptDir);
+
+      if (this.config.runNpmStart) {
+        this.runNpmStart(scriptDir);
+      }
+    }
+  }
+
+  public installDependencies(scriptDir: string): { output: string; code: number } {
+    try {
+      const installDeps = spawnSync(`npm install --prefix ${scriptDir}`);
+      const stdout = installDeps.stdout?.toString();
+      const stderr = installDeps.stderr?.toString();
+      const exitCode = installDeps.status;
+      if (exitCode === 0) {
+        this.logger?.info('npm packages successfully installed!');
+        this.logger?.info(stdout);
+      } else {
+        this.logger?.error(`there was an issue while installing npm packages: ${stderr}`);
+      }
+      return exitCode === 0 ? { output: stdout, code: exitCode } : { output: stderr, code: exitCode || 1 };
+    } catch (e) {
+      this.logger?.error(`Process could not be spawned: ${e.message}`);
+      return { output: e.message, code: 1 };
+    }
+  }
+
+  public runNpmStart(scriptDir: string): { output: string; code: number } {
+    try {
+      const npmStart = spawnSync(`npm run start:dev --prefix ${scriptDir}`);
+      const stdout = npmStart.stdout?.toString();
+      const stderr = npmStart.stderr?.toString();
+      const exitCode = npmStart.status;
+      if (exitCode === 0) {
+        this.logger?.info('npm start command succeeded');
+        this.logger?.info(stdout);
+      } else {
+        this.logger?.error(`there was an issue while starting the application: ${stderr}`);
+      }
+      return exitCode === 0 ? { output: stdout, code: exitCode } : { output: stderr, code: exitCode || 1 };
+    } catch (e) {
+      this.logger?.error(`Process could not be spawned: ${e.message}`);
+      return { output: e.message, code: 1 };
     }
   }
 }

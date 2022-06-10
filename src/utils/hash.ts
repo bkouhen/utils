@@ -1,5 +1,5 @@
 import crypto, { HashOptions } from 'crypto';
-import { WinstonLogger } from 'src/interfaces';
+import { WinstonLogger } from '../interfaces/Logger';
 
 const ERR_VALUE = -1;
 

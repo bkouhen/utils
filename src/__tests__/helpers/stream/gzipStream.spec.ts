@@ -1,12 +1,12 @@
 import path from 'path';
 import fs from 'fs-extra';
 import util from 'util';
-import { fileWriter, fileReader, gzipStream } from '../helpers/file/streamHelper/streamHelper';
+import { fileWriter, fileReader, gzipStream } from '../../../helpers/file/streamHelper/streamHelper';
 import { exec } from 'child_process';
 
 const pExec = util.promisify(exec);
 const pRemove = util.promisify(fs.remove);
-const assetsPath = path.join(__dirname, '/assets');
+const assetsPath = path.join(__dirname, '/../../assets');
 
 beforeAll(() => {
   fs.ensureDirSync(assetsPath);

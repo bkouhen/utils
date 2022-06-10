@@ -1,4 +1,3 @@
-export * from './env/envParser';
-export * from './file/streamHelper/streamChainer';
-export * from './file/streamHelper/streamHelper';
+export * as Env from './env/envParser';
+export * as File from './file/index';
 export * from './logger/Logger';
