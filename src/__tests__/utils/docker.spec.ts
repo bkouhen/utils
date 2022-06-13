@@ -1,4 +1,4 @@
-import { generateDockerFile, generateDockerComposeFile } from '../../utils/docker';
+import { generateDockerFile, generateDockerComposeFile, builDockerImage } from '../../utils/docker';
 import path from 'path';
 import util from 'util';
 import fs from 'fs-extra';
@@ -32,5 +32,14 @@ describe('Docker Compose file tests', () => {
 
     await generateDockerComposeFile(generatedFilePath);
     expect(fs.readFileSync(generatedFilePath).toString()).toStrictEqual(fs.readFileSync(baseFilePath).toString());
+  });
+});
+
+describe('Docker Image Build tests', () => {
+  test('if Docker Image Build throws when wrong parameters', async () => {
+    await expect(
+      builDockerImage({ registry: 'test', scriptName: 'testScript', version: '1.0.0' }),
+    ).rejects.toThrowError();
+    await expect(Promise.reject(new Error('octopus'))).rejects.toThrow('octopus');
   });
 });

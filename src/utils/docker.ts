@@ -1,7 +1,8 @@
 import fs from 'fs-extra';
-import { WinstonLogger } from '../interfaces/Logger';
 import { DockerBuildOptions } from '../interfaces/Docker';
-import { spawnSync } from './process';
+import { spawn } from './process';
+import chalk from 'chalk';
+import { rejects } from 'assert';
 
 /**
  * Function that generates a Dockerfile in a specified path
@@ -79,16 +80,40 @@ services:
   await fs.writeFile(filePath, content);
 };
 
-export const builDockerImage = async (options: DockerBuildOptions, logger?: WinstonLogger) => {
-  const imageTag = `${options.registry}/${options.scriptName}:${options.version}`;
+export const builDockerImage = async (options: DockerBuildOptions) => {
+  const imageTag = `${options.registry}/${options.scriptName}:${options.version}`.toLowerCase();
   const buildCommand = `docker image build -f ${options.file || 'Dockerfile'} -t ${imageTag} --no-cache ${
     options.context || '.'
   }`;
 
+  console.log(chalk.green('Starting building docker image...'));
+
   try {
-    const imageBuild = spawnSync(buildCommand);
-    const stdout = imageBuild.stdout?.toString();
-    const stderr = imageBuild.stderr?.toString();
-    const exitCode = imageBuild.status;
-  } catch (e) {}
+    const exitStatus = await new Promise((resolve, reject) => {
+      const imageBuild = spawn(buildCommand);
+
+      imageBuild.stdout.on('data', (data: Buffer) => {
+        console.log(chalk.blue(data.toString()));
+      });
+
+      imageBuild.stderr.on('data', (data: Buffer) => {
+        console.error(chalk.red(data.toString()));
+      });
+
+      imageBuild.on('exit', (exitCode: number) => {
+        const resolveMessage = `Spawned Build Process exited with code: ${exitCode}`;
+        if (exitCode === 0) {
+          return resolve(resolveMessage);
+        } else {
+          return reject(new Error(resolveMessage));
+        }
+      });
+    });
+
+    console.log(chalk.green(exitStatus));
+    console.log(chalk.green(`You can now run: docker image push ${imageTag}`));
+  } catch (e) {
+    console.error(chalk.red(e));
+    throw e;
+  }
 };

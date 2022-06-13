@@ -1,6 +1,6 @@
 import util from 'util';
 import stream from 'stream';
-import { fileWriter } from '../helpers/file/streamHelper/streamHelper';
+import { fileWriter } from '../helpers/stream/streamHelper';
 
 /**
  * Allows to promisify the ending of a stream execution
