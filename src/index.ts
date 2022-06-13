@@ -1,29 +1,25 @@
 // Helpers
-export * as Helpers from './helpers/index';
+// export * as Helpers from './helpers/index';
+export * from './helpers/env/envParser';
+export * from './helpers/stream/streamHelper';
+export * from './helpers/stream/streamChainer';
+export * from './helpers/logger/Logger';
 
 // Interfaces
-export * as Interfaces from './interfaces/index';
+export * from './interfaces/Docker';
+export * from './interfaces/Env';
+export * from './interfaces/File';
+export * from './interfaces/Logger';
+export * from './interfaces/Npm';
+export * from './interfaces/Script';
 
 // Utils
-export * as Utils from './utils/index';
-
-import { Logger } from './helpers/logger/Logger';
-
-const logger = new Logger().initLogger({
-  logLevel: 'debug',
-  debugMode: true,
-  debugFormatting: {
-    colors: true,
-  },
-  consoleTransport: {
-    enable: true,
-  },
-});
-
-const start = async () => {
-  logger.info('Starting script');
-};
-
-start().then(() => {
-  logger.info('Script has successfully ended');
-});
+export * from './utils/docker';
+export * from './utils/file';
+export * from './utils/hash';
+export * from './utils/npm';
+export * from './utils/process';
+export * from './utils/script';
+export * from './utils/stream';
+export * from './utils/time';
+export * from './utils/uuid';

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { lineSplitStream } from '../../../helpers/file/streamHelper/streamHelper';
+import { lineSplitStream } from '../../../helpers/stream/streamHelper';
 
 const assetsPath = path.join(__dirname, '/../../assets');
 

@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import util from 'util';
-import { fileDownloader, fileWriter, fileReader } from '../../../helpers/file/streamHelper/streamHelper';
+import { fileDownloader, fileWriter, fileReader } from '../../../helpers/stream/streamHelper';
 const pRemove = util.promisify(fs.remove);
 
 const assetsPath = path.join(__dirname, '/../../assets');

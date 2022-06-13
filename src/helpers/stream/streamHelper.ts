@@ -3,7 +3,7 @@ import through from 'through';
 import got, { StreamOptions } from 'got';
 import split from 'split';
 import * as fastCsv from 'fast-csv';
-import { FileWriterOptions, FileReaderOptions, GzipOptions, lineSplitOptions } from '../../../interfaces/File';
+import { FileWriterOptions, FileReaderOptions, GzipOptions, lineSplitOptions } from '../../interfaces/File';
 import fs from 'fs';
 import zlib from 'zlib';
 

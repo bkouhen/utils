@@ -102,7 +102,9 @@ describe('Generating new script tests', () => {
     await expect(fs.pathExists(`${assetsPath}/new_script/package.json`)).resolves.toStrictEqual(true);
     await expect(fs.pathExists(`${assetsPath}/new_script/Dockerfile`)).resolves.toStrictEqual(true);
     await expect(fs.pathExists(`${assetsPath}/new_script/docker-compose.yml`)).resolves.toStrictEqual(true);
-    await new Script(config, logger).generateScript();
+    await expect(new Script(config, logger).generateScript()).rejects.toThrowError(
+      'Script name already taken, please choose another one',
+    );
     expect(logger.error).toBeCalledTimes(1);
   });
 

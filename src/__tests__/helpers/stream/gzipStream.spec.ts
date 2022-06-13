@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import util from 'util';
-import { fileWriter, fileReader, gzipStream } from '../../../helpers/file/streamHelper/streamHelper';
+import { fileWriter, fileReader, gzipStream } from '../../../helpers/stream/streamHelper';
 import { exec } from 'child_process';
 
 const pExec = util.promisify(exec);

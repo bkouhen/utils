@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { fileWriter, csvFormatter, csvParser, fileReader } from '../../../helpers/file/streamHelper/streamHelper';
+import { fileWriter, csvFormatter, csvParser, fileReader } from '../../../helpers/stream/streamHelper';
 
 const assetsPath = path.join(__dirname, '/../../assets');
 

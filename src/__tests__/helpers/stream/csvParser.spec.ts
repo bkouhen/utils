@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { csvParser } from '../../../helpers/file/streamHelper/streamHelper';
+import { csvParser } from '../../../helpers/stream/streamHelper';
 
 const assetsPath = path.join(__dirname, '/../../assets');
 

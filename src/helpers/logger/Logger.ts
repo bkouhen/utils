@@ -7,7 +7,9 @@ const { combine, timestamp, errors, colorize, json, simple, prettyPrint, splat }
 // Interfaces
 import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
 
-/** Class defining a Winston Logger */
+/**
+ * Class defining a Winston Logger
+ */
 export class Logger {
   private logger: WinstonLogger;
 

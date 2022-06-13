@@ -1,5 +1,5 @@
 import { pExec, spawn } from '../../utils/process';
-import { lineSplitStream } from '../../helpers/file/streamHelper/streamHelper';
+import { lineSplitStream } from '../../helpers/stream/streamHelper';
 import path from 'path';
 import stream from 'stream';
 

@@ -1,8 +1,8 @@
 import fs from 'fs-extra';
 import { generateJSONPackageFile } from './npm';
 import { generateDockerComposeFile, generateDockerFile } from './docker';
-import { ScriptConfiguration } from '../interfaces/Script';
-import { pExec, spawn, spawnSync } from './process';
+import { ScriptConfiguration, FileName } from '../interfaces/Script';
+import { spawnSync } from './process';
 import { WinstonLogger } from '../interfaces/Logger';
 
 export class Script {
@@ -30,7 +30,7 @@ export class Script {
 
     if (scriptDirExists) {
       this.logger?.error('Script name already taken, please choose another one');
-      return;
+      throw new Error('Script name already taken, please choose another one');
     }
 
     await fs.ensureDir(scriptDir);
@@ -94,6 +94,12 @@ export class Script {
       this.logger?.error(`Process could not be spawned: ${e.message}`);
       return { output: e.message, code: 1 };
     }
+  }
+}
+
+export const generateFile = (scriptDir:string, fileName: FileName) => {
+  if (fileName === FileName.DOCKERFILE) {
+
   }
 }
 

@@ -3,7 +3,7 @@ import stream, { TransformCallback } from 'stream';
 import { execSync } from 'child_process';
 import { pExec } from './process';
 import { WinstonLogger } from '../interfaces/Logger';
-import { lineSplitStream } from '../helpers/file/streamHelper/streamHelper';
+import { lineSplitStream } from '../helpers/stream/streamHelper';
 
 const ERR_VALUE = -1;
 

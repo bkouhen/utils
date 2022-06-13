@@ -1,5 +1,5 @@
-import { StreamChainerConfiguration } from '../../../interfaces/File';
-import { WinstonLogger } from '../../../interfaces/Logger';
+import { StreamChainerConfiguration } from '../../interfaces/File';
+import { WinstonLogger } from '../../interfaces/Logger';
 
 import * as streamHelper from './streamHelper';
 

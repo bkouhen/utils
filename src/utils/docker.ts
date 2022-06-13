@@ -1,5 +1,7 @@
-import { writeSuccessively } from '../utils/stream';
 import fs from 'fs-extra';
+import { WinstonLogger } from '../interfaces/Logger';
+import { DockerBuildOptions } from '../interfaces/Docker';
+import { spawnSync } from './process';
 
 /**
  * Function that generates a Dockerfile in a specified path
@@ -75,4 +77,18 @@ services:
     command: npm run test:watch
 `;
   await fs.writeFile(filePath, content);
+};
+
+export const builDockerImage = async (options: DockerBuildOptions, logger?: WinstonLogger) => {
+  const imageTag = `${options.registry}/${options.scriptName}:${options.version}`;
+  const buildCommand = `docker image build -f ${options.file || 'Dockerfile'} -t ${imageTag} --no-cache ${
+    options.context || '.'
+  }`;
+
+  try {
+    const imageBuild = spawnSync(buildCommand);
+    const stdout = imageBuild.stdout?.toString();
+    const stderr = imageBuild.stderr?.toString();
+    const exitCode = imageBuild.status;
+  } catch (e) {}
 };

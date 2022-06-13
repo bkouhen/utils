@@ -1,7 +1,7 @@
-import { StreamChainer } from '../../../helpers/file/streamHelper/streamChainer';
+import { StreamChainer } from '../../../helpers/stream/streamChainer';
 import { Logger } from '../../../helpers/logger/Logger';
 import { StreamChainerConfiguration } from '../../../interfaces/File';
-import { lineSplitStream } from '../../../helpers/file/streamHelper/streamHelper';
+import { lineSplitStream } from '../../../helpers/stream/streamHelper';
 import path from 'path';
 import util from 'util';
 import fs from 'fs-extra';
