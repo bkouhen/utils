@@ -26,6 +26,7 @@ console.log('Hello World');
 ### Helpers
 
 - [Logger](./docs/helpers/Logger.md)
+- [EnvParser](./docs/helpers/EnvParser.md)
 
 ## License
 
