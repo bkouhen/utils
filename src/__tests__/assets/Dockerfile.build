@@ -1,0 +1,5 @@
+FROM node:14-slim
+
+WORKDIR /app
+
+CMD [ "echo", "Hello World" ]

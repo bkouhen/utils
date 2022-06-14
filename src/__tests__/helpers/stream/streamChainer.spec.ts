@@ -14,17 +14,6 @@ jest.setTimeout(30000);
 const pRemove = util.promisify(fs.remove);
 const assetsPath = path.join(__dirname, '/../../assets');
 
-const logger = new Logger().initLogger({
-  logLevel: 'debug',
-  debugMode: true,
-  debugFormatting: {
-    colors: true,
-  },
-  consoleTransport: {
-    enable: true,
-  },
-});
-
 beforeAll(() => {});
 
 afterAll(async () => {
@@ -35,7 +24,7 @@ describe('Stream Chainer Test - Errors', () => {
   test('if it throws when no config file', async () => {
     //@ts-ignore
     const config: StreamChainerConfiguration = null;
-    const streamChainer = new StreamChainer(config, logger);
+    const streamChainer = new StreamChainer(config);
     try {
       await streamChainer.run();
     } catch (e) {
@@ -45,7 +34,7 @@ describe('Stream Chainer Test - Errors', () => {
 
   test('if it throws when no items in the pipeline', async () => {
     const config: StreamChainerConfiguration = { name: 'THROW_0_ITEMS', items: [] };
-    const streamChainer = new StreamChainer(config, logger);
+    const streamChainer = new StreamChainer(config);
     try {
       await streamChainer.run();
     } catch (e) {
@@ -58,7 +47,7 @@ describe('Stream Chainer Test - Errors', () => {
       name: 'THROW_1_ITEM_ONLY',
       items: [{ type: 'FILE_READER', config: { absolutePath: '/dev/null' } }],
     };
-    const streamChainer = new StreamChainer(config, logger);
+    const streamChainer = new StreamChainer(config);
     try {
       await streamChainer.run();
     } catch (e) {
@@ -74,7 +63,7 @@ describe('Stream Chainer Test - Errors', () => {
         { type: 'FILE_WRITER', config: { absolutePath: '/dev/null' } },
       ],
     };
-    const streamChainer = new StreamChainer(config, logger);
+    const streamChainer = new StreamChainer(config);
     try {
       await streamChainer.run();
     } catch (e) {
@@ -90,7 +79,7 @@ describe('Stream Chainer Test - Errors', () => {
         { type: 'FILE_READER', config: { absolutePath: '/dev/null' } },
       ],
     };
-    const streamChainer = new StreamChainer(config, logger);
+    const streamChainer = new StreamChainer(config);
     try {
       await streamChainer.run();
     } catch (e) {
@@ -141,7 +130,7 @@ describe('Stream Chainer Test - Complete Process', () => {
         },
       ],
     };
-    const streamChainer = new StreamChainer(config, logger);
+    const streamChainer = new StreamChainer(config);
     await streamChainer.run();
     expect(fs.existsSync(`${assetsPath}/sample.long.written.csv.gz`)).toStrictEqual(true);
 

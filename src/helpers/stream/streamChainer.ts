@@ -7,7 +7,7 @@ import moment from 'moment';
 import stream from 'stream';
 
 export class StreamChainer {
-  constructor(private config: StreamChainerConfiguration, private logger: WinstonLogger) {}
+  constructor(private config: StreamChainerConfiguration, private logger?: WinstonLogger) {}
 
   public async run() {
     const initTimer = moment();
@@ -16,7 +16,7 @@ export class StreamChainer {
       throw new Error('Chain Configuration is required');
     }
 
-    this.logger.info(`Starting the following Stream Chain ${this.config.name}`);
+    this.logger?.info(`Starting the following Stream Chain ${this.config.name}`);
 
     const chainItems = await Promise.all(
       this.config.items.map((item) => {
@@ -44,7 +44,7 @@ export class StreamChainer {
                 return reject(new Error('First Chained Item should be a ReadableStream'));
               }
               curr.on('error', (error: Error) => {
-                this.logger.error(
+                this.logger?.error(
                   `Error happened on the following item ${this.config.items[index].type} : ${error.message}`,
                 );
               });
@@ -65,7 +65,7 @@ export class StreamChainer {
         )
         ?.on('finish', () => {
           const processDuration = moment.duration((moment() as any) - (initTimer as any)).humanize();
-          this.logger.info(`StreamChain ${this.config.name} ended with a duration of ${processDuration}`);
+          this.logger?.info(`StreamChain ${this.config.name} ended with a duration of ${processDuration}`);
           resolve(undefined);
         })
         .on('error', (e) => reject(e));

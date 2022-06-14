@@ -1,8 +1,7 @@
 import fs from 'fs-extra';
-import { DockerBuildOptions } from '../interfaces/Docker';
+import { DockerBuildOptions, DockerPushOptions } from '../interfaces/Docker';
 import { spawn } from './process';
 import chalk from 'chalk';
-import { rejects } from 'assert';
 
 /**
  * Function that generates a Dockerfile in a specified path
@@ -80,7 +79,7 @@ services:
   await fs.writeFile(filePath, content);
 };
 
-export const builDockerImage = async (options: DockerBuildOptions) => {
+export const buildDockerImage = async (options: DockerBuildOptions) => {
   const imageTag = `${options.registry}/${options.scriptName}:${options.version}`.toLowerCase();
   const buildCommand = `docker image build -f ${options.file || 'Dockerfile'} -t ${imageTag} --no-cache ${
     options.context || '.'
@@ -97,7 +96,7 @@ export const builDockerImage = async (options: DockerBuildOptions) => {
       });
 
       imageBuild.stderr.on('data', (data: Buffer) => {
-        console.error(chalk.red(data.toString()));
+        console.error(chalk.blue(data.toString()));
       });
 
       imageBuild.on('exit', (exitCode: number) => {
@@ -112,6 +111,43 @@ export const builDockerImage = async (options: DockerBuildOptions) => {
 
     console.log(chalk.green(exitStatus));
     console.log(chalk.green(`You can now run: docker image push ${imageTag}`));
+    return exitStatus;
+  } catch (e) {
+    console.error(chalk.red(e));
+    throw e;
+  }
+};
+
+export const pushDockerImage = async (options: DockerPushOptions) => {
+  const imageTag = `${options.registry}/${options.scriptName}:${options.version}`.toLowerCase();
+  const buildCommand = `docker image push ${imageTag}`;
+
+  console.log(chalk.green('Starting pushing docker image...'));
+
+  try {
+    const exitStatus = await new Promise((resolve, reject) => {
+      const imagePush = spawn(buildCommand);
+
+      imagePush.stdout.on('data', (data: Buffer) => {
+        console.log(chalk.blue(data.toString()));
+      });
+
+      imagePush.stderr.on('data', (data: Buffer) => {
+        console.error(chalk.blue(data.toString()));
+      });
+
+      imagePush.on('exit', (exitCode: number) => {
+        const resolveMessage = `Spawned Push Process exited with code: ${exitCode}`;
+        if (exitCode === 0) {
+          return resolve(resolveMessage);
+        } else {
+          return reject(new Error(resolveMessage));
+        }
+      });
+    });
+
+    console.log(chalk.green(exitStatus));
+    return exitStatus;
   } catch (e) {
     console.error(chalk.red(e));
     throw e;
