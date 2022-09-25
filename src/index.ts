@@ -3,6 +3,8 @@ export * from './helpers/env/envParser';
 export * from './helpers/stream/streamHelper';
 export * from './helpers/stream/streamChainer';
 export * from './lib/logger/Logger';
+export * from './lib/process/Process';
+export * from './lib/cron/Cron';
 
 // Interfaces
 export * from './interfaces/Docker';
@@ -17,20 +19,13 @@ export * from './utils/docker';
 export * from './utils/file';
 export * from './utils/hash';
 export * from './utils/npm';
-export * from './utils/process';
 export * from './utils/script';
 export * from './utils/stream';
 export * from './utils/time';
 export * from './utils/uuid';
 
-import { Logger } from './lib/logger/Logger';
+import { Cron } from './lib/cron/Cron';
 
-const logger = new Logger().initLogger({
-  logLevel: 'debug',
-  debug: true,
-  errorStack: true,
-  consoleTransport: true,
-  formats: { splat: true },
-});
-
-logger.error('New error message', new Error('Oops'));
+(async () => {
+  await Cron.list();
+})();

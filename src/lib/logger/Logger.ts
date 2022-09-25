@@ -9,6 +9,19 @@ import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
 
 /**
  * Class defining a Winston Logger
+ * @example
+ * ```ts
+ * import { Logger } from './lib/logger/Logger';
+ * const logger = new Logger().initLogger({
+ *  logLevel: 'debug',
+ *  debug: true,
+ *  errorStack: true,
+ *  consoleTransport: true,
+ *  formats: { splat: true },
+ * });
+
+ * logger.debug('New debug message');
+ * ``` 
  */
 export class Logger {
   private logger: WinstonLogger;
