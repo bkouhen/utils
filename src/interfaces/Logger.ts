@@ -6,21 +6,14 @@ type LoggerDefaultMeta = object;
 
 export interface LoggerConfigOptions {
   logLevel: string;
+  debug?: boolean;
   errorStack?: boolean;
-  debugMode?: boolean;
-  debugFormatting?: {
-    colors?: boolean;
-    pretty?: boolean;
-    splat?: boolean;
-    json?: boolean;
-  };
   defaultMeta?: LoggerDefaultMeta;
-  consoleTransport?: {
-    enable: boolean;
-  };
-  fileTransport?: {
-    enable: boolean;
-    filePath: string;
+  consoleTransport?: boolean;
+  fileTransport?: string;
+  formats?: {
+    splat?: boolean;
+    colorize?: boolean;
   };
 }
 
