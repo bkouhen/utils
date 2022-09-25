@@ -2,7 +2,7 @@
 export * from './helpers/env/envParser';
 export * from './helpers/stream/streamHelper';
 export * from './helpers/stream/streamChainer';
-export * from './helpers/logger/Logger';
+export * from './lib/logger/Logger';
 
 // Interfaces
 export * from './interfaces/Docker';
@@ -22,3 +22,15 @@ export * from './utils/script';
 export * from './utils/stream';
 export * from './utils/time';
 export * from './utils/uuid';
+
+import { Logger } from './lib/logger/Logger';
+
+const logger = new Logger().initLogger({
+  logLevel: 'debug',
+  debug: true,
+  errorStack: true,
+  consoleTransport: true,
+  formats: { splat: true },
+});
+
+logger.error('New error message', new Error('Oops'));
