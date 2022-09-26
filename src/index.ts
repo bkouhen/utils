@@ -27,5 +27,5 @@ export * from './utils/uuid';
 import { Cron } from './lib/cron/Cron';
 
 (async () => {
-  await Cron.list();
+  console.log(await Cron.list({ all: false }));
 })();

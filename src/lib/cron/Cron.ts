@@ -3,8 +3,11 @@ import { Process } from '../process/Process';
 export class Cron {
   constructor() {}
 
-  public static async list(): Promise<string> {
+  public static async list({ all = false }: { all?: boolean }): Promise<string> {
     const { stdout } = await Process.pExec('crontab -l');
+    if (all) {
+      return stdout;
+    }
     const allLines = stdout.split('\n');
 
     const filteredLines = allLines.filter((line) => {
@@ -17,7 +20,10 @@ export class Cron {
       }
       return false;
     });
-    console.log(filteredLines.join('\n'));
-    return stdout;
+    return filteredLines.join('\n');
+  }
+
+  public static async convert(): Promise<string> {
+    return '';
   }
 }
