@@ -1,5 +1,5 @@
+import { exec, spawn as childSpawn, SpawnOptionsWithoutStdio, spawnSync as childSpawnSync } from 'child_process';
 import util from 'util';
-import { exec, spawn as childSpawn, spawnSync as childSpawnSync, SpawnOptionsWithoutStdio } from 'child_process';
 
 export class Process {
   constructor() {}
@@ -17,7 +17,7 @@ export class Process {
    * lsExample();
    * ```
    */
-  public static pExec(command: string) {
+  public static async pExec(command: string) {
     try {
       if (!command) {
         throw new Error('No command has been filled in');
@@ -46,7 +46,7 @@ export class Process {
    * lsExample();
    * ```
    */
-  public static spawn(command: string, options?: SpawnOptionsWithoutStdio) {
+  public static async spawn(command: string, options?: SpawnOptionsWithoutStdio) {
     try {
       if (!command) {
         throw new Error('No command has been filled in');

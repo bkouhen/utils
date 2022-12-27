@@ -1,11 +1,10 @@
 // Main Modules
-import winston from 'winston';
-import { format } from 'util';
 import { SPLAT } from 'triple-beam';
-const { combine, timestamp, errors, colorize, json, simple } = winston.format;
-
+import { format } from 'util';
+import winston from 'winston';
 // Interfaces
-import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
+import { LoggerConfigOptions, WinstonLogger } from './interfaces';
+const { combine, timestamp, errors, colorize, json, simple } = winston.format;
 
 /**
  * Class defining a Winston Logger
@@ -21,7 +20,7 @@ import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
  * });
 
  * logger.debug('New debug message');
- * ``` 
+ * ```
  */
 export class Logger {
   private logger: WinstonLogger;
