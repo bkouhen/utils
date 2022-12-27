@@ -1,29 +1,60 @@
-import { exec, spawn as childSpawn, SpawnOptionsWithoutStdio, spawnSync as childSpawnSync } from 'child_process';
+import {
+  exec,
+  execSync,
+  spawn as childSpawn,
+  SpawnOptionsWithoutStdio,
+  spawnSync as childSpawnSync,
+} from 'child_process';
 import util from 'util';
 
 export class Process {
-  constructor() {}
-
   /**
    * Promisified version of the `child_process` exec function
+   * @param command The whole command as written in the shell
+   * @returns: stdout and stderr
    *
    * @example
    * ```ts
    * async function lsExample() {
-   *   const { stdout, stderr } = await Process.pExec('ls');
+   *   const { stdout, stderr } = await Process.exec('ls');
    *   console.log('stdout:', stdout);
    *   console.error('stderr:', stderr);
    * }
    * lsExample();
    * ```
    */
-  public static async pExec(command: string) {
+  public static async exec(command: string): Promise<{ stdout: string; stderr: string }> {
     try {
       if (!command) {
         throw new Error('No command has been filled in');
       }
       const promisifiedExec = util.promisify(exec);
       return promisifiedExec(command);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /**
+   * Sync version of the `child_process` execSync function
+   * @param command The whole command as written in the shell
+   * @returns: stdout
+   *
+   * @example
+   * ```ts
+   * function lsExample() {
+   *   const stdout = Process.execSync('ls');
+   *   console.log('stdout:', stdout);
+   * }
+   * lsExample();
+   * ```
+   */
+  public static execSync(command: string): string {
+    try {
+      if (!command) {
+        throw new Error('No command has been filled in');
+      }
+      return execSync(command).toString();
     } catch (e) {
       throw e;
     }
@@ -39,14 +70,23 @@ export class Process {
    * @example
    * ```ts
    * async function lsExample() {
-   *   const { stdout, stderr } = await Process.spawn('ls -lh /usr');
-   *   console.log('stdout:', stdout);
-   *   console.error('stderr:', stderr);
+   *   const ls = Process.spawn('ls -lh /usr');
+   *    ls.stdout.on('data', (data) => {
+   *      console.log(`stdout: ${data}`);
+   *    });
+   *
+   *    ls.stderr.on('data', (data) => {
+   *      console.log(`stderr: ${data}`);
+   *    });
+   *
+   *    ls.on('close', (code) => {
+   *      console.log(`child process exited with code ${code}`);
+   *    });
    * }
    * lsExample();
    * ```
    */
-  public static async spawn(command: string, options?: SpawnOptionsWithoutStdio) {
+  public static spawn(command: string, options?: SpawnOptionsWithoutStdio) {
     try {
       if (!command) {
         throw new Error('No command has been filled in');

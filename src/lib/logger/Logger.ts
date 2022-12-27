@@ -25,8 +25,6 @@ const { combine, timestamp, errors, colorize, json, simple } = winston.format;
 export class Logger {
   private logger: WinstonLogger;
 
-  constructor() {}
-
   /**
    * Initialize a Winston Logger Instance
    * @param {LoggerConfigOptions} options - options passed to the Logger as configuration
