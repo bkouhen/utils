@@ -1,19 +1,29 @@
 // Main Modules
-import winston from 'winston';
-import { format } from 'util';
 import { SPLAT } from 'triple-beam';
-const { combine, timestamp, errors, colorize, json, simple } = winston.format;
-
+import { format } from 'util';
+import winston from 'winston';
 // Interfaces
-import { WinstonLogger, LoggerConfigOptions } from '../../interfaces/Logger';
+import { LoggerConfigOptions, WinstonLogger } from './interfaces';
+const { combine, timestamp, errors, colorize, json, simple } = winston.format;
 
 /**
  * Class defining a Winston Logger
+ * @example
+ * ```ts
+ * import { Logger } from './lib/logger/Logger';
+ * const logger = new Logger().initLogger({
+ *  logLevel: 'debug',
+ *  debug: true,
+ *  errorStack: true,
+ *  consoleTransport: true,
+ *  formats: { splat: true },
+ * });
+
+ * logger.debug('New debug message');
+ * ```
  */
 export class Logger {
   private logger: WinstonLogger;
-
-  constructor() {}
 
   /**
    * Initialize a Winston Logger Instance

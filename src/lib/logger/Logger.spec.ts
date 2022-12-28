@@ -1,6 +1,6 @@
-import { Logger } from '../../../src/lib/logger/Logger';
-import path from 'path';
 import fs from 'fs-extra';
+import path from 'path';
+import { Logger } from './Logger';
 
 expect.extend({
   toMatchLogFormat(received: string, match: string) {
@@ -52,20 +52,14 @@ expect.extend({
   },
 });
 
-const assetsPath = path.join(__dirname, '/../../assets');
-const logFilePath = path.join(assetsPath, 'logfile.log');
+const logFilePath = path.join(__dirname, 'logfile.log');
 
-beforeAll(() => {
-  fs.ensureDirSync(assetsPath);
-  fs.ensureFileSync(logFilePath);
+beforeAll(async () => {
+  await fs.ensureFile(logFilePath);
 });
 
 afterAll(async () => {
-  await fs.remove(logFilePath, (error) => {
-    if (error) {
-      console.log(error);
-    }
-  });
+  await fs.remove(logFilePath);
 });
 
 describe('Init Logger Test', () => {
