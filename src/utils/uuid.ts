@@ -1,6 +1,6 @@
 import { v1 as uuidv1, V1Options, validate as uuidValidate, version as uuidVersion } from 'uuid';
+import { WinstonLogger } from '../lib/Logger/interfaces';
 import { hash } from './hash';
-import { WinstonLogger } from '../interfaces/Logger';
 
 const ERR_VALUE = -1;
 

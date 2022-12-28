@@ -1,10 +1,8 @@
-import { StreamChainerConfiguration } from '../../interfaces/File';
-import { WinstonLogger } from '../../interfaces/Logger';
-
-import * as streamHelper from './streamHelper';
-
 import moment from 'moment';
 import stream from 'stream';
+import { StreamChainerConfiguration } from '../../interfaces/File';
+import { WinstonLogger } from '../../lib/Logger/interfaces';
+import * as streamHelper from './streamHelper';
 
 export class StreamChainer {
   constructor(private config: StreamChainerConfiguration, private logger?: WinstonLogger) {}

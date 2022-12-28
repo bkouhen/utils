@@ -1,7 +1,7 @@
+import chalk from 'chalk';
 import fs from 'fs-extra';
 import { DockerBuildOptions, DockerPushOptions } from '../interfaces/Docker';
-import { spawn } from './process';
-import chalk from 'chalk';
+import { Process } from '../lib/Process/Process';
 
 /**
  * Function that generates a Dockerfile in a specified path
@@ -89,7 +89,7 @@ export const buildDockerImage = async (options: DockerBuildOptions) => {
 
   try {
     const exitStatus = await new Promise((resolve, reject) => {
-      const imageBuild = spawn(buildCommand);
+      const imageBuild = Process.spawn(buildCommand);
 
       imageBuild.stdout.on('data', (data: Buffer) => {
         console.log(chalk.blue(data.toString()));
@@ -126,7 +126,7 @@ export const pushDockerImage = async (options: DockerPushOptions) => {
 
   try {
     const exitStatus = await new Promise((resolve, reject) => {
-      const imagePush = spawn(buildCommand);
+      const imagePush = Process.spawn(buildCommand);
 
       imagePush.stdout.on('data', (data: Buffer) => {
         console.log(chalk.blue(data.toString()));

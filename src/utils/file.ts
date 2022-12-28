@@ -1,9 +1,9 @@
+import { execSync } from 'child_process';
 import fs from 'fs-extra';
 import stream, { TransformCallback } from 'stream';
-import { execSync } from 'child_process';
-import { pExec } from './process';
-import { WinstonLogger } from '../interfaces/Logger';
 import { lineSplitStream } from '../helpers/stream/streamHelper';
+import { WinstonLogger } from '../lib/Logger/interfaces';
+import { Process } from '../lib/Process/Process';
 
 const ERR_VALUE = -1;
 
@@ -72,7 +72,7 @@ export const countLines = async (
   }
 
   try {
-    const numberOfLines = (await pExec(`wc -l ${filePath}`)).stdout;
+    const numberOfLines = (await Process.exec(`wc -l ${filePath}`)).stdout;
     return parseInt(numberOfLines);
   } catch (e) {
     logger?.error(e);
