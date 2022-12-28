@@ -1,9 +1,9 @@
 import fs from 'fs-extra';
-import { generateJSONPackageFile } from './npm';
+import { FileName, ScriptConfiguration } from '../interfaces/Script';
+import { WinstonLogger } from '../lib/Logger/interfaces';
+import { Process } from '../lib/Process/Process';
 import { generateDockerComposeFile, generateDockerFile } from './docker';
-import { ScriptConfiguration, FileName } from '../interfaces/Script';
-import { spawnSync } from './process';
-import { WinstonLogger } from '../interfaces/Logger';
+import { generateJSONPackageFile } from './npm';
 
 export class Script {
   private config: ScriptConfiguration;
@@ -60,7 +60,7 @@ export class Script {
 
   public installDependencies(scriptDir: string): { output: string; code: number } {
     try {
-      const installDeps = spawnSync(`npm install --prefix ${scriptDir}`);
+      const installDeps = Process.spawnSync(`npm install --prefix ${scriptDir}`);
       const stdout = installDeps.stdout?.toString();
       const stderr = installDeps.stderr?.toString();
       const exitCode = installDeps.status;
@@ -79,7 +79,7 @@ export class Script {
 
   public runNpmStart(scriptDir: string): { output: string; code: number } {
     try {
-      const npmStart = spawnSync(`npm run start:dev --prefix ${scriptDir}`);
+      const npmStart = Process.spawnSync(`npm run start:dev --prefix ${scriptDir}`);
       const stdout = npmStart.stdout?.toString();
       const stderr = npmStart.stderr?.toString();
       const exitCode = npmStart.status;
@@ -97,11 +97,10 @@ export class Script {
   }
 }
 
-export const generateFile = (scriptDir:string, fileName: FileName) => {
+export const generateFile = (scriptDir: string, fileName: FileName) => {
   if (fileName === FileName.DOCKERFILE) {
-
   }
-}
+};
 
 export const generatePrettierFile = async (filePath: string): Promise<void> => {
   const content = `module.exports = {
