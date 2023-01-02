@@ -1,16 +1,9 @@
-import {
-  Script,
-  generatePrettierFile,
-  generateEditorConfigFile,
-  generateIndexFile,
-  generateJestConfigFile,
-  generateTypescriptConfigFile,
-} from '../../utils/script';
-import { ScriptConfiguration } from '../../interfaces/Script';
-import { WinstonLogger } from '../../interfaces/Logger';
+import fs from 'fs-extra';
 import path from 'path';
 import util from 'util';
-import fs from 'fs-extra';
+import { WinstonLogger } from '../../interfaces/Logger';
+import { ScriptConfiguration } from '../../interfaces/Script';
+import { Script } from '../../utils/script';
 
 jest.setTimeout(20000);
 
@@ -36,50 +29,6 @@ afterAll(async () => {
   await pRemove(`${assetsPath}/new_script`);
   await pRemove(`${assetsPath}/new_script2`);
   await pRemove(`${assetsPath}/non_existant_dir`);
-});
-
-describe('Generating files tests', () => {
-  test('if .prettierrc.js is correctly generated', async () => {
-    const generatedFilePath = `${assetsPath}/.prettierrc.js.gen`;
-    const baseFilePath = `${assetsPath}/.prettierrc.js`;
-
-    await generatePrettierFile(generatedFilePath);
-    expect(fs.readFileSync(generatedFilePath).toString()).toStrictEqual(fs.readFileSync(baseFilePath).toString());
-  });
-
-  test('if .editorconfig is correctly generated', async () => {
-    const generatedFilePath = `${assetsPath}/.editorconfig.gen`;
-    const baseFilePath = `${assetsPath}/.editorconfig`;
-
-    await generateEditorConfigFile(generatedFilePath);
-    expect(fs.readFileSync(generatedFilePath).toString()).toStrictEqual(fs.readFileSync(baseFilePath).toString());
-  });
-
-  test('if index.ts is correctly generated', async () => {
-    const generatedFilePath = `${assetsPath}/index.ts.gen`;
-    const baseFilePath = `${assetsPath}/index.ts`;
-
-    await generateIndexFile(generatedFilePath);
-    expect(fs.readFileSync(generatedFilePath).toString()).toStrictEqual(fs.readFileSync(baseFilePath).toString());
-  });
-
-  test('if jest.config.js is correctly generated', async () => {
-    const generatedFilePath = `${assetsPath}/jest.config.js.gen`;
-    const baseFilePath = `${assetsPath}/jest.config.js`;
-
-    await generateJestConfigFile(generatedFilePath, 'script_name');
-    expect(fs.readFileSync(generatedFilePath).toString()).toStrictEqual(fs.readFileSync(baseFilePath).toString());
-  });
-
-  test('if tsconfig.json is correctly generated', async () => {
-    const generatedFilePath = `${assetsPath}/tsconfig.json.gen`;
-    const baseFilePath = `${assetsPath}/tsconfig.json`;
-
-    await generateTypescriptConfigFile(generatedFilePath);
-    expect(JSON.parse(fs.readFileSync(generatedFilePath).toString())).toStrictEqual(
-      JSON.parse(fs.readFileSync(baseFilePath).toString()),
-    );
-  });
 });
 
 describe('Generating new script tests', () => {

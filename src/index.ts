@@ -22,8 +22,9 @@ export * from './utils/stream';
 export * from './utils/time';
 export * from './utils/uuid';
 
-import { Cron } from './lib/Cron/Cron';
+import { Script } from './lib/Script/Script';
 
 (async () => {
-  console.log(await Cron.list({}));
+  const script = new Script({ absolutePath: '/tmp', scriptName: 'testing2', override: true });
+  await script.generateScript();
 })();

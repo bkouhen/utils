@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  build:
+    image: node:14
+    container_name: build
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: npm run watch
+
+  script:
+    image: node:14
+    container_name: script
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: npm run start:dev
+
+  test:
+    image: node:14
+    container_name: test
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: npm run test:watch

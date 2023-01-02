@@ -10,7 +10,7 @@ export interface NpmPackage {
   author?: string;
   license?: string;
   private?: boolean;
-  scripts?: JSONObject;
-  devDependencies?: JSONObject;
-  dependencies?: JSONObject;
+  scripts?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  dependencies?: Record<string, string>;
 }

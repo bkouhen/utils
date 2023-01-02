@@ -102,3 +102,9 @@ export const countLinesFromStream = async (readableStream: stream.Readable): Pro
     readableStream.pipe(lineSplitter).pipe(countStream).pipe(noop);
   });
 };
+
+export const ensureDirs = async (dirs: string[]) => {
+  await dirs.forEach(async (dir) => {
+    await fs.ensureDir(dir);
+  });
+};
